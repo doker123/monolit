@@ -19,9 +19,9 @@
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                aria-expanded="false">Профиль</a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Мои объявления</a>
-                <a class="dropdown-item" href="#">Изменить личные данные</a>
-                <a class="dropdown-item" href="#">Изменить пароль</a>
+                <a class="dropdown-item" href="{% url 'app:profile' %}">Мои объявления</a>
+                <a class="dropdown-item" href="{% url 'app:profile_change' %}">Изменить личные данные</a>
+                <a class="dropdown-item" href="{% url 'app:password_change' %}">Изменить пароль</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'app:logout' %}">Выйти</a>
                 <div class="dropdown-divider"></div>
@@ -30,7 +30,7 @@
         </div>
         {% else %}
         <a class="p-2 text-dark" href="#">Регистрация</a>
-        <a class="p-2 text-dark" href="#">Вход</a>
+        <a class="p-2 text-dark" href="{% url 'app:login' %}">Вход</a>
         {% endif %}
     </div>
     <div class="row">
