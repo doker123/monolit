@@ -14,6 +14,7 @@ from django.views.generic import UpdateView
 from .forms import ChangeUserInfoForm
 from .models import ProfileUser
 from django.contrib.auth.views import PasswordChangeView
+from django.views.generic import CreateView
 def index(request):
     return render(request, 'app/index.html')
 
