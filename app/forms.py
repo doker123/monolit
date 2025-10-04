@@ -1,10 +1,9 @@
-from cProfile import label
 
 from django import forms
 from .models import ProfileUser
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-# from .models import user_registred
+from .models import user_registered
 
 class ChangeUserInfoForm(forms.ModelForm):
     email = forms.EmailField(required=True, label='Адрес электронной почты')
@@ -41,9 +40,10 @@ class  RegisterUserForm(forms.ModelForm):
         user.is_activated=False
         if commit:
             user.save()
-        user_registred.send(RegisterUserForm, instance=user)
+        user_registered.send(RegisterUserForm, instance=user)
         return user
 
     class Meta:
         model = ProfileUser
-        fields = ['username', 'email','password1','password2','avatar', 'first_name', 'last_name', 'send_messages']
+        fields = ['username', 'email','password1','password2','avatar',
+                  'first_name', 'last_name', 'send_messages']

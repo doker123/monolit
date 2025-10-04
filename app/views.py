@@ -15,6 +15,8 @@ from .forms import ChangeUserInfoForm
 from .models import ProfileUser
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import CreateView
+from .forms import RegisterUserForm
+from django.views.generic.base import TemplateView
 def index(request):
     return render(request, 'app/index.html')
 
@@ -56,3 +58,12 @@ class BBPasswordChangeView(SuccessMessageMixin, LoginRequiredMixin, PasswordChan
     template_name = 'app/password_change.html'
     success_url = reverse_lazy('app:profile')
     success_message = 'Пороль пользователя изменён'
+
+class RegisterUserView(CreateView):
+    model = ProfileUser
+    template_name = 'app/register_user.html'
+    form_class = RegisterUserForm
+    success_url = reverse_lazy('app:register_done')
+
+class RegisterDoneView(TemplateView):
+    template_name = 'app/register_done.html'

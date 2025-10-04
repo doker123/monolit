@@ -29,7 +29,7 @@
             </div>
         </div>
         {% else %}
-        <a class="p-2 text-dark" href="#">Регистрация</a>
+        <a class="p-2 text-dark" href="{% url 'app:register' %}">Регистрация</a>
         <a class="p-2 text-dark" href="{% url 'app:login' %}">Вход</a>
         {% endif %}
     </div>
