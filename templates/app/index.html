@@ -10,6 +10,14 @@
     <title>index</title>
 </head>
 <body>
-<a href=" {% url 'app:profile' %}"></a>
+<header>
+    <nav>
+        <a href="{% url 'app:profile' %}">Профиль</a>
+        <a href="{% url 'app:logout' %}">Выйти из профиля</a>
+        <a href="{% url 'app:register' %}">Регистрация</a>
+    </nav>
+</header>
+
+
 </body>
 </html>
