@@ -65,5 +65,6 @@ class RegisterUserView(CreateView):
     form_class = RegisterUserForm
     success_url = reverse_lazy('app:register_done')
 
+
 class RegisterDoneView(TemplateView):
     template_name = 'app/register_done.html'
