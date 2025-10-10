@@ -12,7 +12,7 @@ class ChangeUserInfoForm(forms.ModelForm):
         fields = ['username', 'email', 'first_name','avatar', 'last_name', 'send_messages']
 
 class  RegisterUserForm(forms.ModelForm):
-    avatar = forms.ImageField(required=True, label='Аватар пользователя')
+    avatar = forms.ImageField(required=False, label='Аватар пользователя')
     email = forms.EmailField( required=True, label='Адресс электроной почты')
     password1 = forms.CharField(label='Пороль', widget=forms.PasswordInput, help_text= password_validation.password_validators_help_text_html())
     password2 = forms.CharField(label='Пороль(повторно)', widget= forms.PasswordInput, help_text= password_validation.password_validators_help_text_html())
@@ -35,7 +35,6 @@ class  RegisterUserForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password1'])
-        user.avatar = True
         user.is_active = False
         user.is_activated=False
         if commit:
