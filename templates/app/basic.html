@@ -25,7 +25,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'app:logout' %}">Выйти</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Удалить</a>
+                <a class="dropdown-item" href="{% url 'app:profile_delete' %}">Удалить</a>
             </div>
         </div>
         {% else %}

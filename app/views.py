@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.template import TemplateDoesNotExist
+from django.template.context_processors import request
 from django.template.loader import get_template
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
@@ -17,6 +18,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import CreateView
 from .forms import RegisterUserForm
 from django.views.generic.base import TemplateView
+from django.views.generic import DeleteView
+from django.contrib import messages
 def index(request):
     return render(request, 'app/index.html')
 
@@ -45,6 +48,10 @@ class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('app:profile')
     success_message = 'Личные данные пользователя изменены.'
 
+    def __init__(self, **kwargs):
+        super().__init__(kwargs)
+        self.user_id = None
+
     def dispatch(self, request,*args, **kwargs):
         self.user_id = request.user.id
         return super().dispatch(request,*args, **kwargs)
@@ -68,3 +75,26 @@ class RegisterUserView(CreateView):
 
 class RegisterDoneView(TemplateView):
     template_name = 'app/register_done.html'
+
+class DeleteUserView(LoginRequiredMixin, DeleteView):
+    model = ProfileUser
+    template_name = 'app/delete-user.html'
+    success_url = reverse_lazy('app:index')
+
+    def __init__(self, **kwargs):
+        super().__init__(kwargs)
+        self.user_id = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.user_id = request.user.id
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        messages.add_message(request, messages.SUCCESS, 'Пользователь удалён')
+        return super().post(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if not queryset:
+            queryset = self.get_queryset()
+        return get_object_or_404(queryset, pk=self.user_id)

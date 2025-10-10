@@ -1,4 +1,3 @@
-
 from django import forms
 from .models import ProfileUser
 from django.contrib.auth import password_validation
@@ -10,9 +9,10 @@ class ChangeUserInfoForm(forms.ModelForm):
 
     class Meta:
         model = ProfileUser
-        fields = ['username', 'email', 'first_name', 'last_name', 'send_messages']
+        fields = ['username', 'email', 'first_name','avatar', 'last_name', 'send_messages']
 
 class  RegisterUserForm(forms.ModelForm):
+    avatar = forms.ImageField(required=True, label='Аватар пользователя')
     email = forms.EmailField( required=True, label='Адресс электроной почты')
     password1 = forms.CharField(label='Пороль', widget=forms.PasswordInput, help_text= password_validation.password_validators_help_text_html())
     password2 = forms.CharField(label='Пороль(повторно)', widget= forms.PasswordInput, help_text= password_validation.password_validators_help_text_html())
