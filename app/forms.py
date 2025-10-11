@@ -46,3 +46,4 @@ class  RegisterUserForm(forms.ModelForm):
         model = ProfileUser
         fields = ['username', 'email','password1','password2','avatar',
                   'first_name', 'last_name', 'send_messages']
+

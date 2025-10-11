@@ -1,25 +1,25 @@
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse, Http404
 from django.template import TemplateDoesNotExist
-from django.template.context_processors import request
 from django.template.loader import get_template
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
-from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 from .forms import ChangeUserInfoForm
-from .models import ProfileUser
+from .models import ProfileUser, Question, Choice, Vote
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import CreateView
 from .forms import RegisterUserForm
 from django.views.generic.base import TemplateView
 from django.views.generic import DeleteView
 from django.contrib import messages
+from django.views.generic import DetailView, ListView
 def index(request):
     return render(request, 'app/index.html')
 
@@ -49,7 +49,7 @@ class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     success_message = 'Личные данные пользователя изменены.'
 
     def __init__(self, **kwargs):
-        super().__init__(kwargs)
+        super().__init__(**kwargs)
         self.user_id = None
 
     def dispatch(self, request,*args, **kwargs):
@@ -82,7 +82,7 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('app:index')
 
     def __init__(self, **kwargs):
-        super().__init__(kwargs)
+        super().__init__(**kwargs)
         self.user_id = None
 
     def dispatch(self, request, *args, **kwargs):
@@ -98,3 +98,46 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
         if not queryset:
             queryset = self.get_queryset()
         return get_object_or_404(queryset, pk=self.user_id)
+
+class QuestionListView(ListView):
+    model = Question
+    template_name = 'app/question_list.html'
+    context_object_name = 'questions'
+
+    def get_queryset(self):
+        return Question.objects.filter(expires_at__gt=timezone.now()).order_by('-created_at')
+
+class QuestionDetailView(DetailView):
+    model = Question
+    template_name = 'app/question_detail.html'
+    context_object_name = 'question'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        question = self.get_object()
+
+        user_has_voted = False
+        if self.request.user.is_authenticated:
+            user_has_voted = Vote.objects.filter(user=self.request.user, choice__question=question).exists()
+
+        context["user_has_voted"] = user_has_voted
+        if user_has_voted:
+                context['results'] = question.get_vote_results()
+
+        return context
+
+@login_required
+def vote_view(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+
+    if request.method == 'POST':
+        choice_id = request.POST.get('choice')
+        choice = get_object_or_404(Choice, pk=choice_id, question=question)
+
+        if Vote.objects.filter(user=request.user, choice__question=choice).exists():
+            messages.error(request, "Вы уже голосовали за этот вопрос.")
+        else:
+            Vote.objects.create(user=request.user, choice=choice)
+            messages.success(request, "Спасибо за ваш голос!")
+
+    return redirect('question_detail', pk=question.pk)
