@@ -1,0 +1,12 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <h3>Варианты ответов:</h3>
+    {% for i in "12345" %}
+        <label>Вариант {{ forloop.counter }}:</label>
+        <input type="text" name="choice_{{ forloop.counter }}" placeholder="Введите вариант ответа">
+    {% endfor %}
+
+    <button type="submit">Создать опрос</button>
+</form>

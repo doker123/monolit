@@ -20,6 +20,8 @@ from django.views.generic.base import TemplateView
 from django.views.generic import DeleteView
 from django.contrib import messages
 from django.views.generic import DetailView, ListView
+from .forms import QuestionForm, ChoiceForm
+from django.contrib.admin.views.decorators import staff_member_required
 def index(request):
     return render(request, 'app/index.html')
 
@@ -141,3 +143,20 @@ def vote_view(request, pk):
             messages.success(request, "Спасибо за ваш голос!")
 
     return redirect('question_detail', pk=question.pk)
+
+@staff_member_required
+def create_question_view(request):
+    if request.method == 'POST':
+        q_form = QuestionForm(request.POST, request.FILES)
+        if q_form.is_valid():
+            question = q_form.save()
+
+            for i in range(1, 6):
+                choice_text = request.POST.get(f'choice_{i}')
+                if choice_text:
+                    Choice.objects.create(question=question, text=choice_text)
+            return redirect('question_list')
+    else:
+        q_form = QuestionForm()
+
+    return render(request, 'app/create_question.html', {'form': q_form})

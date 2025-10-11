@@ -1,0 +1,7 @@
+<h1>Список вопросов</h1>
+{% for question in questions %}
+    <div>
+        <h2><a href="{% url 'question_detail' question.pk %}">{{ question.title }}</a></h2>
+        <p>{{ question.short_description }}</p>
+    </div>
+{% endfor %}

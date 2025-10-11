@@ -6,7 +6,10 @@ from .views import profile
 from .views import logout_view
 from .views import ChangeUserInfoView
 from .views import BBPasswordChangeView
-from .views import RegisterUserView, RegisterDoneView
+from .views import RegisterUserView, RegisterDoneView, QuestionListView, QuestionDetailView, vote_view, create_question_view
+
+
+
 
 app_name = 'app'
 
@@ -21,4 +24,8 @@ urlpatterns = [
     path('app/accounts/register', RegisterUserView.as_view(), name='register'),
     path('accounts/logout/', logout_view, name='logout'),
     path('accounts/password/change/', BBPasswordChangeView.as_view(), name='password_change'),
+    path('question/', QuestionListView.as_view(), name='question_list'),
+    path('question/<int:pk>/', QuestionDetailView.as_view(), name='question_detail'),
+    path('question/<int:pk>/vote/', vote_view, name='vote'),
+    path('create/', create_question_view, name='create_question')
 ]

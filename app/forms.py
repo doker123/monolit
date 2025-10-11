@@ -1,5 +1,5 @@
 from django import forms
-from .models import ProfileUser
+from .models import ProfileUser, Question, Choice
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from .models import user_registered
@@ -47,3 +47,28 @@ class  RegisterUserForm(forms.ModelForm):
         fields = ['username', 'email','password1','password2','avatar',
                   'first_name', 'last_name', 'send_messages']
 
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['title', 'short_description', 'full_description', 'image']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'short_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'full_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }
+
+class ChoiceForm(forms.ModelForm):
+    class Meta:
+        model = Choice
+        fields = ['text']
+        widgets = {
+            'text': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+# Форма голосования (опционально, можно использовать просто POST-данные)
+class VoteForm(forms.Form):
+    choice = forms.ModelChoiceField(queryset=Choice.objects.none(), widget=forms.RadioSelect)
+
+    def __init__(self, question, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['choice'].queryset = question.choices.all()

@@ -1,0 +1,25 @@
+<h1>{{ question.title }}</h1>
+<p>{{ question.full_description }}</p>
+
+{% if question.image %}
+    <img src="{{ question.image.url }}" alt="Изображение к вопросу">
+{% endif %}
+
+{% if user_has_voted %}
+    <h3>Результаты голосования:</h3>
+    <ul>
+        {% for result in results %}
+            <li>{{ result.choice }}: {{ result.votes }} голосов ({{ result.percentage }}%)</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+        {% for choice in question.choices.all %}
+            <label>
+                <input type="radio" name="choice" value="{{ choice.pk }}"> {{ choice.text }}
+            </label><br>
+        {% endfor %}
+        <button type="submit">Проголосовать</button>
+    </form>
+{% endif %}

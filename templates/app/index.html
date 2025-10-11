@@ -17,7 +17,8 @@
     </nav>
 </header>
 <main>
-    <a href="#">Создать голосование</a>
+    <a href="{% url 'app:create_question' %}">Создать голосование</a>
+    <a href="{% url 'app:question_list' %}">Список действующи опросов</a>
 </main>
 </body>
 </html>
