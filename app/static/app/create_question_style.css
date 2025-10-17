@@ -1,0 +1,13 @@
+.formVariants {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+}
+.container {
+    width: 1000px;
+}
+button {
+    margin-top:35px;
+    width: 250px;
+}

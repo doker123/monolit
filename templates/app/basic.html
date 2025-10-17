@@ -8,7 +8,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app/style.css' %}">
     {% bootstrap_css %}
     {% bootstrap_javascript jquery='slim' %}
-    <title>{% block title %} Главная {% endblock %} - Электронная доска объявлений </title>
+    <title>{% block title %} Главная {% endblock %} - Электронная доска опросов </title>
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 <div class="container-fluid">
@@ -37,17 +38,11 @@
         <nav class="col-md-auto nav flex-column">
             <a class="nav-link root" href="{% url 'app:index' %}">Главная</a>
             <span class="nav-link root font-weight-bold">
-Недвижимость
 </span>
-            <a class="nav-link" href="#">Жилье</a>
-            <a class="nav-link" href="#">Скалады</a>
-            <a class="nav-link" href="#">Квартиры</a>
+
             <span class="nav-link root font-weight-bold">
-Транспорт
 </span>
-            <a class="nav-link" href="#">Автомобили</a>
-            <a class="nav-link" href="#">Мото</a>
-            <a class="nav-link" href="#">Велосипеды</a>
+
         </nav>
         <div class="container">
             {% bootstrap_messages %}

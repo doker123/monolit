@@ -1,3 +1,6 @@
+{% extends "app/basic.html" %}
+
+{% block content %}
 <h1>{{ question.title }}</h1>
 <p>{{ question.full_description }}</p>
 
@@ -13,7 +16,7 @@
         {% endfor %}
     </ul>
 {% else %}
-    <form method="post">
+    <form method="post" action="{% url 'app:vote' pk=question.pk %}">
         {% csrf_token %}
         {% for choice in question.choices.all %}
             <label>
@@ -23,3 +26,5 @@
         <button type="submit">Проголосовать</button>
     </form>
 {% endif %}
+{% endblock %}
+

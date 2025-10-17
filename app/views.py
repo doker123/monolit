@@ -20,8 +20,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic import DeleteView
 from django.contrib import messages
 from django.views.generic import DetailView, ListView
-from .forms import QuestionForm, ChoiceForm
-from django.contrib.admin.views.decorators import staff_member_required
+from .forms import QuestionForm
 def index(request):
     return render(request, 'app/index.html')
 
@@ -124,7 +123,7 @@ class QuestionDetailView(DetailView):
 
         context["user_has_voted"] = user_has_voted
         if user_has_voted:
-                context['results'] = question.get_vote_results()
+                context['results'] = question.get_results()
 
         return context
 
@@ -136,15 +135,15 @@ def vote_view(request, pk):
         choice_id = request.POST.get('choice')
         choice = get_object_or_404(Choice, pk=choice_id, question=question)
 
-        if Vote.objects.filter(user=request.user, choice__question=choice).exists():
+        if Vote.objects.filter(user=request.user, choice__question=question).exists():
             messages.error(request, "Вы уже голосовали за этот вопрос.")
         else:
             Vote.objects.create(user=request.user, choice=choice)
             messages.success(request, "Спасибо за ваш голос!")
 
-    return redirect('question_detail', pk=question.pk)
+    return redirect('app:question_detail', pk=question.pk)
 
-@staff_member_required
+@login_required
 def create_question_view(request):
     if request.method == 'POST':
         q_form = QuestionForm(request.POST, request.FILES)
@@ -155,7 +154,7 @@ def create_question_view(request):
                 choice_text = request.POST.get(f'choice_{i}')
                 if choice_text:
                     Choice.objects.create(question=question, text=choice_text)
-            return redirect('question_list')
+            return redirect('app:question_list')
     else:
         q_form = QuestionForm()
 

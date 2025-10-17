@@ -1,24 +1,16 @@
+{% extends "app/basic.html" %}
 {% load static %}
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>index</title>
-</head>
-<body>
-<header>
-    <nav>
-        <a href="{% url 'app:logout' %}">Выйти из профиля</a>
-        <a href="{% url 'app:register' %}">Регистрация</a>
-    </nav>
-</header>
-<main>
-    <a href="{% url 'app:create_question' %}">Создать голосование</a>
-    <a href="{% url 'app:question_list' %}">Список действующи опросов</a>
-</main>
-</body>
-</html>
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/index_style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div>
+        <a href="{% url 'app:create_question' %}">Создать голосование</a>
+    </div>
+    <div>
+        <a href="{% url 'app:question_list' %}">Список действующи опросов</a>
+    </div>
+
+{% endblock %}

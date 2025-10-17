@@ -1,12 +1,25 @@
+{% extends "app/basic.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/create_question_style.css' %}">
+{% endblock %}
+
+{% block content %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
 
     <h3>Варианты ответов:</h3>
+<div class="formVariants">
     {% for i in "12345" %}
+        <div class="formVariant" >
         <label>Вариант {{ forloop.counter }}:</label>
         <input type="text" name="choice_{{ forloop.counter }}" placeholder="Введите вариант ответа">
+        </div>
     {% endfor %}
 
     <button type="submit">Создать опрос</button>
+</div>
 </form>
+{% endblock %}
