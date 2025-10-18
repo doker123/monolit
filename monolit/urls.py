@@ -18,13 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+"""Пути к путям моего приложения app"""
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls')),
 
 ]
-
+"""Что-бы в дебаге работали картинки"""
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
