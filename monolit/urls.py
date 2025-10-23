@@ -20,9 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 """Пути к путям моего приложения app"""
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include('app.urls')),
-
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
 ]
 """Что-бы в дебаге работали картинки"""
 if settings.DEBUG:
